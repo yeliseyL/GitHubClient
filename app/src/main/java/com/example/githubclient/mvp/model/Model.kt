@@ -4,9 +4,9 @@ class Model {
     private val counters = mutableListOf(0, 0, 0)
 
     /**
-     * Эта функция бла бла бла
-     * @param index
-     * @return
+     * Increases given counters element by 1
+     * @param index element index
+     * @return increased value
      */
     fun next(index: Int): Int {
         val nextValue = counters[index] + 1

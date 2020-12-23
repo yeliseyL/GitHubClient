@@ -1,6 +1,8 @@
 package com.example.githubclient.mvp.presenter
 
-import com.example.githubclient.R
+import com.example.githubclient.Constants.INDEX_1
+import com.example.githubclient.Constants.INDEX_2
+import com.example.githubclient.Constants.INDEX_3
 import com.example.githubclient.mvp.model.Model
 import com.example.githubclient.mvp.view.MainView
 
@@ -9,9 +11,9 @@ class Presenter(private val view: MainView) {
 
     fun counterClick(id: Int) {
         when (id) {
-            R.id.btn_counter1 -> view.setButtonText(0, model.next(0).toString())
-            R.id.btn_counter2 -> view.setButtonText(1, model.next(1).toString())
-            R.id.btn_counter3 -> view.setButtonText(2, model.next(2).toString())
+            INDEX_1 -> view.setButtonText(INDEX_1, model.next(INDEX_1).toString())
+            INDEX_2 -> view.setButtonText(INDEX_2, model.next(INDEX_2).toString())
+            INDEX_3 -> view.setButtonText(INDEX_3, model.next(INDEX_3).toString())
         }
     }
 
