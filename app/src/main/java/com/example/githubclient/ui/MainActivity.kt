@@ -33,4 +33,14 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onPause()
         navigatorHolder.removeNavigator()
     }
+
+    override fun onBackPressed() {
+
+        supportFragmentManager.fragments.forEach {
+            if(it is BackButtonListener && it.backPressed()){
+                return
+            }
+        }
+        presenter.backClicked()
+    }
 }
