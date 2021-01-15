@@ -5,10 +5,11 @@ import com.example.githubclient.mvp.model.entity.GithubUsersRepo
 import com.example.githubclient.mvp.presenter.list.IUserListPresenter
 import com.example.githubclient.mvp.view.UsersView
 import com.example.githubclient.mvp.view.list.UserItemView
+import com.example.githubclient.navigation.Screens
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) : MvpPresenter<UsersView>() {
+class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router: Router) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -31,7 +32,7 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router) : MvpPr
         loadData()
 
         usersListPresenter.itemClickListener = {itemView ->
-            // TODO:
+            router.navigateTo(Screens.UserScreen(itemView.pos))
         }
     }
 

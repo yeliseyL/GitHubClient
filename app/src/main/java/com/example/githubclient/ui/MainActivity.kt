@@ -12,8 +12,8 @@ import moxy.ktx.moxyPresenter
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
 class MainActivity : MvpAppCompatActivity(), MainView {
-    val navigatorHolder = App.instance.navigatorHolder
-    val navigator = SupportAppNavigator(this, supportFragmentManager, R.id.container)
+    private val navigatorHolder = App.instance.navigatorHolder
+    private val navigator = SupportAppNavigator(this, supportFragmentManager, R.id.container)
 
     private val presenter by moxyPresenter {
         MainPresenter(App.instance.router)
@@ -33,17 +33,4 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onPause()
         navigatorHolder.removeNavigator()
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        supportFragmentManager.fragments.forEach {
-            if(it is BackButtonListener && it.backPressed()){
-                return
-            }
-        }
-
-        presenter.backClicked()
-    }
-
 }

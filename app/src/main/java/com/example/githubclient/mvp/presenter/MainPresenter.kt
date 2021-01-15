@@ -5,7 +5,7 @@ import com.example.githubclient.navigation.Screens
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class MainPresenter(val router: Router) : MvpPresenter<MainView>() {
+class MainPresenter(private val router: Router) : MvpPresenter<MainView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
