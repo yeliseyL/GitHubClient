@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubclient.App
 import com.example.githubclient.R
 import com.example.githubclient.mvp.model.entity.GithubUser
-import com.example.githubclient.mvp.model.entity.GithubUsersRepo
 import com.example.githubclient.mvp.presenter.UserPresenter
-import com.example.githubclient.mvp.presenter.UsersPresenter
 import com.example.githubclient.mvp.view.UserView
-import com.example.githubclient.mvp.view.UsersView
 import com.example.githubclient.ui.BackButtonListener
-import com.example.githubclient.ui.adapter.UsersRVAdapter
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment

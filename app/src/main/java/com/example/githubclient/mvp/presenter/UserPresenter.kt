@@ -1,12 +1,6 @@
 package com.example.githubclient.mvp.presenter
 
-import com.example.githubclient.mvp.model.entity.GithubUser
-import com.example.githubclient.mvp.model.entity.GithubUsersRepo
-import com.example.githubclient.mvp.presenter.list.IUserListPresenter
 import com.example.githubclient.mvp.view.UserView
-import com.example.githubclient.mvp.view.UsersView
-import com.example.githubclient.mvp.view.list.UserItemView
-import com.example.githubclient.navigation.Screens
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
