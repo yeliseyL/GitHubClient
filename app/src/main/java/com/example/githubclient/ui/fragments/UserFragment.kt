@@ -9,11 +9,13 @@ import com.example.githubclient.ApiHolder
 import com.example.githubclient.App
 import com.example.githubclient.R
 import com.example.githubclient.mvp.model.entity.GithubUser
+import com.example.githubclient.mvp.model.entity.room.Database
 import com.example.githubclient.mvp.model.repo.retrofit.RetrofitGithubRepositoriesRepo
 import com.example.githubclient.mvp.presenter.UserPresenter
 import com.example.githubclient.mvp.view.UserView
 import com.example.githubclient.ui.BackButtonListener
 import com.example.githubclient.ui.adapter.ReposotoriesRVAdapter
+import com.example.githubclient.ui.network.AndroidNetworkStatus
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_users.*
@@ -37,12 +39,12 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
         val user = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
 
         UserPresenter(user, AndroidSchedulers.mainThread(),
-            RetrofitGithubRepositoriesRepo(ApiHolder().api),
+            RetrofitGithubRepositoriesRepo(ApiHolder().api, AndroidNetworkStatus(App.instance), Database.getInstance()),
             App.instance.router
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         View.inflate(context, R.layout.fragment_user, null)
 
     override fun init() {
