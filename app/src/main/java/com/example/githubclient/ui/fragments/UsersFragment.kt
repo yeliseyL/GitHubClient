@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubclient.ApiHolder
 import com.example.githubclient.App
 import com.example.githubclient.R
+import com.example.githubclient.mvp.model.cache.room.RoomGithubUsersCache
+import com.example.githubclient.mvp.model.entity.room.Database
 import com.example.githubclient.mvp.model.repo.retrofit.RetrofitGithubUsersRepo
 import com.example.githubclient.mvp.presenter.UsersPresenter
 import com.example.githubclient.mvp.view.UsersView
 import com.example.githubclient.ui.BackButtonListener
 import com.example.githubclient.ui.adapter.UsersRVAdapter
 import com.example.githubclient.ui.image.GlideImageLoader
+import com.example.githubclient.ui.network.AndroidNetworkStatus
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment
@@ -25,14 +28,24 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(
-        AndroidSchedulers.mainThread(),
-        RetrofitGithubUsersRepo(ApiHolder().api),
-        App.instance.router) }
+    val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter(
+            AndroidSchedulers.mainThread(),
+            RetrofitGithubUsersRepo(
+                AndroidNetworkStatus(App.instance),
+                RoomGithubUsersCache(ApiHolder().api, Database.getInstance())
+            ),
+            App.instance.router
+        )
+    }
 
     var adapter: UsersRVAdapter? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         View.inflate(context, R.layout.fragment_users, null)
 
     override fun init() {
