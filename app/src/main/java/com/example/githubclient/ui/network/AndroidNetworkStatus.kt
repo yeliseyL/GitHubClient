@@ -33,5 +33,5 @@ class AndroidNetworkStatus(context: Context) : INetworkStatus {
 
     override fun isOnline() = statusSubject
 
-    override fun isOnlineSingle(): Single<Boolean> = statusSubject.first(false)
+    override fun isOnlineSingle() = statusSubject.first(false)
 }

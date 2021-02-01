@@ -9,8 +9,15 @@ import com.example.githubclient.navigation.Screens
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UsersPresenter(private val mainThreadScheduler: Scheduler, private val usersRepo: IGithubUsersRepo, private val router: Router) : MvpPresenter<UsersView>() {
+class UsersPresenter(val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
+
+
+    @Inject
+    lateinit var usersRepo: IGithubUsersRepo
+    @Inject
+    lateinit var router: Router
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -22,7 +29,7 @@ class UsersPresenter(private val mainThreadScheduler: Scheduler, private val use
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
 
-            user.login.let { view.setLogin(it) }
+            user.login?.let { view.setLogin(it) }
             user.avatarUrl?.let {view.loadAvatar(it)}
         }
     }

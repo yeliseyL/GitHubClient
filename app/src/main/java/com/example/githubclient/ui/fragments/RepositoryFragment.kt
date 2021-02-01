@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.githubclient.App
 import com.example.githubclient.R
 import com.example.githubclient.mvp.model.entity.GithubRepository
 import com.example.githubclient.mvp.presenter.RepositoryPresenter
@@ -15,7 +14,9 @@ import kotlinx.android.synthetic.main.fragment_repository.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
+
 class RepositoryFragment : MvpAppCompatFragment(), RepositoryView, BackButtonListener {
+
     companion object {
         private const val REPOSITORY_ARG = "repository"
 
@@ -26,10 +27,12 @@ class RepositoryFragment : MvpAppCompatFragment(), RepositoryView, BackButtonLis
         }
     }
 
+    var adapter: ReposotoriesRVAdapter? = null
+
     val presenter: RepositoryPresenter by moxyPresenter {
         val repository = arguments?.getParcelable<GithubRepository>(REPOSITORY_ARG) as GithubRepository
 
-        RepositoryPresenter(repository, App.instance.router)
+        RepositoryPresenter(repository)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
