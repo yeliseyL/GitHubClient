@@ -9,9 +9,9 @@ import com.example.githubclient.mvp.model.repo.IGithubRepositoriesRepo
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class RetrofitGithubRepositoriesRepo(val api: IDataSource, val networkStatus: INetworkStatus, val cache: IGithubRepositoriesCache) :
+class RetrofitGithubRepositoriesRepo(val api: IDataSource, private val networkStatus: INetworkStatus, val cache: IGithubRepositoriesCache) :
     IGithubRepositoriesRepo {
-    override fun getRepositories(user: GithubUser) = networkStatus.isOnlineSingle().flatMap { isOnline ->
+    override fun getRepositories(user: GithubUser): Single<List<GithubRepository>> = networkStatus.isOnlineSingle().flatMap { isOnline ->
         if (isOnline) {
             user.reposUrl?.let { url ->
                 api.getRepositories(url)

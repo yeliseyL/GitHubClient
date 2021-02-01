@@ -2,7 +2,9 @@ package com.example.githubclient.mvp.presenter
 
 import com.example.githubclient.mvp.model.entity.GithubRepository
 import com.example.githubclient.mvp.model.entity.GithubUser
+import com.example.githubclient.mvp.model.entity.room.Database
 import com.example.githubclient.mvp.model.repo.IGithubRepositoriesRepo
+import com.example.githubclient.mvp.model.repo.IGithubUsersRepo
 import com.example.githubclient.mvp.presenter.list.IRepositoryListPresenter
 import com.example.githubclient.mvp.view.UserView
 import com.example.githubclient.mvp.view.list.RepositoryItemView
@@ -10,9 +12,18 @@ import com.example.githubclient.navigation.Screens
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UserPresenter(val user: GithubUser, val mainThreadScheduler: Scheduler, val repositoriesRepo: IGithubRepositoriesRepo, val router: Router) :
-    MvpPresenter<UserView>() {
+class UserPresenter(val user: GithubUser) : MvpPresenter<UserView>() {
+
+    @Inject
+    lateinit var mainThreadScheduler: Scheduler
+    @Inject
+    lateinit var database: Database
+    @Inject
+    lateinit var router: Router
+    @Inject
+    lateinit var repositoriesRepo: IGithubRepositoriesRepo
 
     class RepositoriesListPresenter : IRepositoryListPresenter {
         val repositories = mutableListOf<GithubRepository>()
@@ -38,7 +49,7 @@ class UserPresenter(val user: GithubUser, val mainThreadScheduler: Scheduler, va
         }
     }
 
-    fun loadData() {
+    private fun loadData() {
         repositoriesRepo.getRepositories(user)
             .observeOn(mainThreadScheduler)
             .subscribe({ repositories ->

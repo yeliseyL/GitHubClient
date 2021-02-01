@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 class UsersPresenter(val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
 
+
     @Inject
     lateinit var usersRepo: IGithubUsersRepo
     @Inject

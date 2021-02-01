@@ -18,7 +18,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
-    val navigator = SupportAppNavigator(this, supportFragmentManager, R.id.container)
+    private val navigator = SupportAppNavigator(this, supportFragmentManager, R.id.container)
 
     private val presenter by moxyPresenter {
         MainPresenter().apply {
@@ -31,10 +31,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         setContentView(R.layout.activity_main)
 
         App.instance.appComponent.inject(this)
-        //Creation().exec()
-        //Operators().exec()
-        //Sources().exec()
-        //BackPressure().exec()
     }
 
     override fun onResumeFragments() {

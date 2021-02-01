@@ -5,31 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.githubclient.ApiHolder
 import com.example.githubclient.App
 import com.example.githubclient.R
-import com.example.githubclient.mvp.model.cache.room.RoomGithubRepositoriesCache
 import com.example.githubclient.mvp.model.entity.GithubUser
-import com.example.githubclient.mvp.model.entity.room.Database
-import com.example.githubclient.mvp.model.repo.retrofit.RetrofitGithubRepositoriesRepo
 import com.example.githubclient.mvp.presenter.UserPresenter
 import com.example.githubclient.mvp.view.UserView
 import com.example.githubclient.ui.BackButtonListener
 import com.example.githubclient.ui.adapter.ReposotoriesRVAdapter
-import com.example.githubclient.ui.network.AndroidNetworkStatus
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import ru.terrakok.cicerone.Router
-import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
-
-    // ДЗ избавиться из зависимостей ниже
-    @Inject
-    lateinit var router: Router
-    @Inject lateinit var database: Database
 
     companion object {
         private const val USER_ARG = "user"
@@ -38,8 +25,6 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
             arguments = Bundle().apply {
                 putParcelable(USER_ARG, user)
             }
-
-            App.instance.appComponent.inject(this)
         }
     }
 
@@ -47,14 +32,16 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     val presenter: UserPresenter by moxyPresenter {
         val user = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
-
-        UserPresenter(user, AndroidSchedulers.mainThread(),
-            RetrofitGithubRepositoriesRepo(ApiHolder().api, AndroidNetworkStatus(App.instance), RoomGithubRepositoriesCache(database)),
-            router
-        )
+        UserPresenter(user).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         View.inflate(context, R.layout.fragment_user, null)
 
     override fun init() {

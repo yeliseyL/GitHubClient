@@ -2,11 +2,10 @@ package com.example.githubclient.di
 
 import com.example.githubclient.di.modules.*
 import com.example.githubclient.mvp.presenter.MainPresenter
+import com.example.githubclient.mvp.presenter.UserPresenter
 import com.example.githubclient.mvp.presenter.UsersPresenter
 import com.example.githubclient.ui.MainActivity
-import com.example.githubclient.ui.fragments.RepositoryFragment
-import com.example.githubclient.ui.fragments.UserFragment
-import com.example.githubclient.ui.fragments.UsersFragment
+import com.example.githubclient.ui.adapter.UsersRVAdapter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -17,16 +16,14 @@ import javax.inject.Singleton
         AppModule::class,
         DatabaseModule::class,
         CiceroneModule::class,
-        RepoModule::class
+        RepoModule::class,
+        ImageLoaderModule::class
     ]
 )
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(mainPresenter: MainPresenter)
+    fun inject(userPresenter: UserPresenter)
     fun inject(usersPresenter: UsersPresenter)
-
-    // ДЗ - избавиться от зависимостей ниже
-    fun inject(usersFragment: UsersFragment)
-    fun inject(userFragment: UserFragment)
-    fun inject(repositoryFragment: RepositoryFragment)
+    fun inject(usersRVAdapter: UsersRVAdapter)
 }
