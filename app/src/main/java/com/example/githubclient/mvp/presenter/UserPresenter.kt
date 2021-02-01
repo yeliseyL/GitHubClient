@@ -11,9 +11,8 @@ import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class UserPresenter(private val user: GithubUser, private val mainThreadScheduler: Scheduler, private val repositoriesRepo: IGithubRepositoriesRepo, private val router: Router) :
+class UserPresenter(val user: GithubUser, val mainThreadScheduler: Scheduler, val repositoriesRepo: IGithubRepositoriesRepo, val router: Router) :
     MvpPresenter<UserView>() {
-
 
     class RepositoriesListPresenter : IRepositoryListPresenter {
         val repositories = mutableListOf<GithubRepository>()
@@ -39,10 +38,10 @@ class UserPresenter(private val user: GithubUser, private val mainThreadSchedule
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         repositoriesRepo.getRepositories(user)
-            ?.observeOn(mainThreadScheduler)
-            ?.subscribe({ repositories ->
+            .observeOn(mainThreadScheduler)
+            .subscribe({ repositories ->
                 repositoriesListPresenter.repositories.clear()
                 repositoriesListPresenter.repositories.addAll(repositories)
                 viewState.updateList()

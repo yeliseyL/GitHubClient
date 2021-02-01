@@ -21,8 +21,16 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
+
+    // ДЗ избавиться из зависимостей ниже
+    @Inject
+    lateinit var router: Router
+    @Inject lateinit var database: Database
+
     companion object {
         private const val USER_ARG = "user"
 
@@ -30,6 +38,8 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
             arguments = Bundle().apply {
                 putParcelable(USER_ARG, user)
             }
+
+            App.instance.appComponent.inject(this)
         }
     }
 
@@ -38,21 +48,13 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     val presenter: UserPresenter by moxyPresenter {
         val user = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
 
-        UserPresenter(
-            user, AndroidSchedulers.mainThread(),
-            RetrofitGithubRepositoriesRepo(
-                AndroidNetworkStatus(App.instance),
-                RoomGithubRepositoriesCache(ApiHolder().api, Database.getInstance())
-            ),
-            App.instance.router
+        UserPresenter(user, AndroidSchedulers.mainThread(),
+            RetrofitGithubRepositoriesRepo(ApiHolder().api, AndroidNetworkStatus(App.instance), RoomGithubRepositoriesCache(database)),
+            router
         )
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         View.inflate(context, R.layout.fragment_user, null)
 
     override fun init() {

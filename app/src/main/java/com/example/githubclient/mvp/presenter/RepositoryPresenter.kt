@@ -5,11 +5,11 @@ import com.example.githubclient.mvp.view.RepositoryView
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class RepositoryPresenter(private val githubRepository: GithubRepository, private val router: Router) : MvpPresenter<RepositoryView>() {
+class RepositoryPresenter(val githubRepository: GithubRepository, val router: Router) : MvpPresenter<RepositoryView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        viewState.setId(githubRepository.id)
+        viewState.setId(githubRepository.id ?: "")
         viewState.setTitle(githubRepository.name ?: "")
         viewState.setForksCount((githubRepository.forksCount ?: 0).toString())
     }
@@ -21,6 +21,6 @@ class RepositoryPresenter(private val githubRepository: GithubRepository, privat
 
     override fun onDestroy() {
         super.onDestroy()
-        println("onDestroy presenter")
+        System.out.println("onDestroy presenter")
     }
 }
