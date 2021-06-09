@@ -11,22 +11,12 @@ import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.terrakok.cicerone.Router
 
-class UserPresenter(private val user: GithubUser, private val mainThreadScheduler: Scheduler, private val repositoriesRepo: IGithubRepositoriesRepo, private val router: Router) :
+class UserPresenter(private val user: GithubUser,
+                    private val mainThreadScheduler: Scheduler,
+                    private val repositoriesRepo: IGithubRepositoriesRepo,
+                    private val router: Router,
+                    val repositoriesListPresenter: RepositoriesListPresenter) :
     MvpPresenter<UserView>() {
-
-
-    class RepositoriesListPresenter : IRepositoryListPresenter {
-        val repositories = mutableListOf<GithubRepository>()
-        override var itemClickListener: ((RepositoryItemView) -> Unit)? = null
-        override fun getCount() = repositories.size
-
-        override fun bindView(view: RepositoryItemView) {
-            val repository = repositories[view.pos]
-            repository.name?.let { view.setName(it) }
-        }
-    }
-
-    val repositoriesListPresenter = RepositoriesListPresenter()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -39,16 +29,20 @@ class UserPresenter(private val user: GithubUser, private val mainThreadSchedule
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         repositoriesRepo.getRepositories(user)
             ?.observeOn(mainThreadScheduler)
             ?.subscribe({ repositories ->
-                repositoriesListPresenter.repositories.clear()
-                repositoriesListPresenter.repositories.addAll(repositories)
-                viewState.updateList()
+                updateData(repositories)
             }, {
                 println("Error: ${it.message}")
             })
+    }
+
+    fun updateData(repositories: List<GithubRepository>) {
+        repositoriesListPresenter.repositories.clear()
+        repositoriesListPresenter.repositories.addAll(repositories)
+        viewState.updateList()
     }
 
     fun backPressed(): Boolean {
@@ -60,3 +54,15 @@ class UserPresenter(private val user: GithubUser, private val mainThreadSchedule
         super.onDestroy()
     }
 }
+
+class RepositoriesListPresenter : IRepositoryListPresenter {
+    var repositories = mutableListOf<GithubRepository>()
+    override var itemClickListener: ((RepositoryItemView) -> Unit)? = null
+    override fun getCount() = repositories.size
+
+    override fun bindView(view: RepositoryItemView) {
+        val repository = repositories[view.pos]
+        repository.name?.let { view.setName(it) }
+    }
+}
+
